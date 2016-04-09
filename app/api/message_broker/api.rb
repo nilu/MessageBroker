@@ -65,6 +65,14 @@ module MessageBroker
 
       ### Consume Messages
 
+      # POST /queues/:id/consumers
+      desc 'Registers a new consumer to a queue.'
+      params do 
+        requires :queue_id, type: String, desc: 'Queue ID.'
+        requires :callback_url, type: String, desc: 'URL for receiving messages.'
+      end
+
+      # GET /queues/:id/consumers
       desc 'Return the list of consumers for a queue'
       params do 
         requires :queue_id, type: String, desc: 'Queue ID.'
@@ -74,6 +82,7 @@ module MessageBroker
         queue.consumers.all
       end
 
+      # DELETE /queues/:id/consumers/:consumer_id
       desc 'Delete an existing consumer.'
       params do
         requires :queue_id, type: String, desc: 'Queue ID.'

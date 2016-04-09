@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(version: 20160409182846) do
   enable_extension "plpgsql"
 
   create_table "consumers", force: :cascade do |t|
-    t.integer "queue_id"
+    t.integer "custom_queue_id"
     t.string  "callback_url"
   end
 
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 20160409182846) do
   end
 
   create_table "messages", force: :cascade do |t|
-    t.integer "queue_id"
+    t.integer "custom_queue_id"
     t.string  "body"
   end
 

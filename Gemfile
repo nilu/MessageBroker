@@ -27,6 +27,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'grape'
 # Helper for CRUD Http requests
 gem 'httparty' 
+# disables security feature of strong_params at the model layer, 
+# allowing us to use Grape's own param validation instead
+gem 'hashie-forbidden_attributes'
 
 
 

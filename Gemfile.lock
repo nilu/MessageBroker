@@ -76,6 +76,8 @@ GEM
       rack-accept
       virtus (>= 1.0.0)
     hashie (3.4.3)
+    hashie-forbidden_attributes (0.1.1)
+      hashie (>= 3.0)
     httparty (0.13.7)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
@@ -199,6 +201,7 @@ DEPENDENCIES
   byebug
   coffee-rails (~> 4.1.0)
   grape
+  hashie-forbidden_attributes
   httparty
   jbuilder (~> 2.0)
   jquery-rails

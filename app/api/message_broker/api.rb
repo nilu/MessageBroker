@@ -37,7 +37,7 @@ module MessageBroker
         })
       end
 
-      # DELETE /queues:id
+      # DELETE /queues/:id
       desc 'Delete an existing queue.'
       params do
         requires :id, type: String, desc: 'Queue ID.'
@@ -52,11 +52,11 @@ module MessageBroker
       # POST /queues/:id/messages
       desc 'Sends new message to all registered consumers of a queue'
       params do 
-        requires :queue_id, type: String, desc: 'Queue ID.'
+        requires :id, type: String, desc: 'Queue ID.'
         requires :body, type: String, desc: 'message body (text)'
       end
-      post ':queue_id/messages' do
-        queue = CustomQueue.find(params[:queue_id])
+      post ':id/messages' do
+        queue = CustomQueue.find(params[:id])
         queue.consumers.each do |consumer|
           # send message to callback url with body & timestamps
         end
@@ -68,29 +68,33 @@ module MessageBroker
       # POST /queues/:id/consumers
       desc 'Registers a new consumer to a queue.'
       params do 
-        requires :queue_id, type: String, desc: 'Queue ID.'
+        requires :id, type: String, desc: 'Queue ID.'
         requires :callback_url, type: String, desc: 'URL for receiving messages.'
+      end
+      post ':id/consumers' do
+        queue = CustomQueue.find(params[:id])
+        queue.consumers.create!(callback_url: params[:callback_url])
       end
 
       # GET /queues/:id/consumers
       desc 'Return the list of consumers for a queue'
       params do 
-        requires :queue_id, type: String, desc: 'Queue ID.'
+        requires :id, type: String, desc: 'Queue ID.'
       end
-      get ':queue_id/consumers' do
-        queue = CustomQueue.find(params[:queue_id])
+      get ':id/consumers' do
+        queue = CustomQueue.find(params[:id])
         queue.consumers.all
       end
-
+      
       # DELETE /queues/:id/consumers/:consumer_id
       desc 'Delete an existing consumer.'
       params do
-        requires :queue_id, type: String, desc: 'Queue ID.'
+        requires :id, type: String, desc: 'Queue ID.'
         requires :consumer_id, type: String, desc: 'Consumer ID.'
       end
-      delete ':queue_id/consumers/:consumer_id' do
-        queue = CustomQueue.find(params[:queue_id])
-        queue.find_by_id(params[:consumer_id])
+      delete ':id/consumers/:consumer_id' do
+        queue = CustomQueue.find_by_id(params[:id])
+        queue.consumers.find_by_id(params[:consumer_id]).destroy
       end
     end
 

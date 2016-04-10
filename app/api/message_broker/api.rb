@@ -20,9 +20,8 @@ module MessageBroker
         requires :name, type: String, desc: 'Queue name'
       end
       post do
-        CustomQueue.create!({
-          name: params[:name]
-        })
+        new_queue = CustomQueue.create!(name: params[:name])
+        {'status': 'ok', 'id': new_queue.id.to_s }
       end
 
       # PUT /queues/:id
@@ -32,9 +31,8 @@ module MessageBroker
         requires :name, type: String, desc: 'Queue name.'
       end
       put ':id' do
-        CustomQueue.find(params[:id]).update({
-          name: params[:name]
-        })
+        CustomQueue.find(params[:id]).update(name: params[:name])
+        {'status': 'ok'}
       end
 
       # DELETE /queues/:id
@@ -44,6 +42,7 @@ module MessageBroker
       end
       delete ':id' do
         CustomQueue.find_by_id(params[:id]).destroy
+        {'status': 'ok'}
       end
 
 
@@ -60,6 +59,7 @@ module MessageBroker
         queue.consumers.each do |consumer|
           # send message to callback url with body & timestamps
         end
+        {'status': 'ok'}
       end
 
 
@@ -74,6 +74,7 @@ module MessageBroker
       post ':id/consumers' do
         queue = CustomQueue.find(params[:id])
         queue.consumers.create!(callback_url: params[:callback_url])
+        {'status': 'ok'}
       end
 
       # GET /queues/:id/consumers
@@ -95,6 +96,7 @@ module MessageBroker
       delete ':id/consumers/:consumer_id' do
         queue = CustomQueue.find_by_id(params[:id])
         queue.consumers.find_by_id(params[:consumer_id]).destroy
+        {'status': 'ok'}
       end
     end
 

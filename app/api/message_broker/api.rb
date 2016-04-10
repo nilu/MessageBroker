@@ -3,7 +3,6 @@ module MessageBroker
     version 'v1', using: :header, vendor: 'human api'
     format :json
 
-
     resource :queues do
 
       ### Queue Management
@@ -100,7 +99,9 @@ module MessageBroker
       end
     end
 
-
+    rescue_from :all do |e|
+      error!({"status": "error","error": e.message})
+    end
   end
 end
 

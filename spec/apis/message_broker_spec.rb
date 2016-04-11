@@ -160,5 +160,17 @@ describe MessageBroker::API do
         })
       end
     end
+
+    context 'Errors' do
+      it 'any error should return an error with error message' do
+        post "/queues", not_a_real_param: 'test'
+        expect(last_response.status).to eq(500)
+
+        expect(JSON.parse(last_response.body)).to eq ({
+          "status" => "error",
+          "error" => "name is missing"
+        })
+      end
+    end
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160409182846) do
+ActiveRecord::Schema.define(version: 20160410224934) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 20160409182846) do
   create_table "messages", force: :cascade do |t|
     t.integer "custom_queue_id"
     t.string  "body"
+    t.integer "timestamp"
   end
 
   create_table "statuses", force: :cascade do |t|

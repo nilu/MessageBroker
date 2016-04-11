@@ -55,8 +55,11 @@ module MessageBroker
       end
       post ':id/messages' do
         queue = CustomQueue.find(params[:id])
+        timestamp = Time.now.to_i
+        message_body = params[:body]
+        new_message = queue.messages.create!(timestamp: timestamp, body: message_body)
         queue.consumers.each do |consumer|
-          # send message to callback url with body & timestamps
+          consumer.send_message(timestamp, message_body, new_message.id)
         end
         {'status': 'ok'}
       end

@@ -3,6 +3,11 @@ class Consumer < ActiveRecord::Base
 
   include HTTParty # For sending http request to consumer
 
+  validates :callback_url, presence: true
+  validates :callback_url, format: {with: URI.regexp}
+  validates :queue_id, presence: true
+  validates :valid_queue
+
   def send_message(timestamp, message, message_id)
     begin
       puts "Sending Message to..."
@@ -22,6 +27,15 @@ class Consumer < ActiveRecord::Base
       retry 
     rescue Exception => e
       puts e
+    end
+  end
+
+  private
+
+  def valid_queue
+    queue = CustomQueue.find_by_id(self.queue_id)
+    if queue.nil?
+      errors.add(:queue, "does not exist")
     end
   end
 end

@@ -3,15 +3,15 @@ class Message < ActiveRecord::Base
 
   validates :body, presence: true
   validates :timestamp, presence: true
-  validates :queue_id, presence: true
+  validates :custom_queue_id, presence: true
   validate :valid_queue
 
   private
 
   def valid_queue
-    queue = CustomQueue.find_by_id(self.queue_id)
+    queue = CustomQueue.find_by_id(self.custom_queue_id)
     if queue.nil?
-      errors.add(:queue, "does not exist")
+      errors.add('Queue', "does not exist")
     end
   end
 end

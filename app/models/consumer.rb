@@ -5,8 +5,8 @@ class Consumer < ActiveRecord::Base
 
   validates :callback_url, presence: true
   validates :callback_url, format: {with: URI.regexp}
-  validates :queue_id, presence: true
-  validates :valid_queue
+  validates :custom_queue_id, presence: true
+  validate :valid_queue
 
   def send_message(timestamp, message, message_id)
     begin
@@ -33,9 +33,9 @@ class Consumer < ActiveRecord::Base
   private
 
   def valid_queue
-    queue = CustomQueue.find_by_id(self.queue_id)
+    queue = CustomQueue.find_by_id(self.custom_queue_id)
     if queue.nil?
-      errors.add(:queue, "does not exist")
+      errors.add('Queue', "does not exist")
     end
   end
 end
